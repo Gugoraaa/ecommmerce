@@ -15,15 +15,16 @@ export async function sendEmail(opciones:SendMailOptions) {
 }
 
 
-
-export async function generateResetToken(email:string):Promise<string|null > {
+export async function generateResetToken(email:string):Promise<void|null > {
     const emailResult= DatabaseUser.findByEmail(email)
     if (!emailResult) {
       return null;
     } 
     const token = crypto.randomBytes(32).toString("hex");
-    const expires = new Date(Date.now() + 60 * 60 * 1000)
-    
+    const expires = new Date(Date.now() + 15 * 60 * 1000); 
+    await DatabaseUser.registerToken(email,token,expires);
+    return
+
 
     
   }
